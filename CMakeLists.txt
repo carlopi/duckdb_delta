@@ -24,22 +24,22 @@ set(KERNEL_NAME delta_kernel)
 set_directory_properties(PROPERTIES EP_PREFIX ${CMAKE_BINARY_DIR}/rust)
 
 # Propagate arch to rust build for CI
-set(RUST_PLATFORM_TARGET "wasm32-unknown-unknown")
+set(RUST_PLATFORM_TARGET "wasm32-unknown-emscripten")
 
 # Add rust_example as a CMake target
 ExternalProject_Add(
         ${KERNEL_NAME}
-        GIT_REPOSITORY "https://github.com/delta-incubator/delta-kernel-rs"
-        GIT_TAG 08f0764a00e89f42136fd478823d28278adc7ee8
+        GIT_REPOSITORY "https://github.com/carlopi/delta-kernel-rs"
+        GIT_TAG main
         CONFIGURE_COMMAND ""
         UPDATE_COMMAND ""
         BUILD_IN_SOURCE 1
         # Build debug build
-        BUILD_COMMAND cargo build --package delta_kernel_ffi --workspace --all-features --target=${RUST_PLATFORM_TARGET}
+        BUILD_COMMAND cargo build --package delta_kernel_ffi --workspace --target=${RUST_PLATFORM_TARGET}
         # Build release build
-        COMMAND cargo build --package delta_kernel_ffi --workspace --all-features --release --target=${RUST_PLATFORM_TARGET}
+        COMMAND cargo build --package delta_kernel_ffi --workspace --release --target=${RUST_PLATFORM_TARGET}
         # Build DATs
-        COMMAND cargo build --manifest-path=${CMAKE_BINARY_DIR}/rust/src/delta_kernel/acceptance/Cargo.toml
+        COMMAND cargo build --manifest-path=${CMAKE_BINARY_DIR}/rust/src/delta_kernel/acceptance/Cargo.toml --target=${RUST_PLATFORM_TARGET}
         BUILD_BYPRODUCTS "${CMAKE_BINARY_DIR}/rust/src/delta_kernel/target/${RUST_PLATFORM_TARGET}/debug/libdelta_kernel_ffi.a"
         BUILD_BYPRODUCTS "${CMAKE_BINARY_DIR}/rust/src/delta_kernel/target/${RUST_PLATFORM_TARGET}/release/libdelta_kernel_ffi.a"
         BUILD_BYPRODUCTS "${CMAKE_BINARY_DIR}/rust/src/delta_kernel/target/ffi-headers/delta_kernel_ffi.h"
