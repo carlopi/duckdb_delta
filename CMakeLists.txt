@@ -17,18 +17,6 @@ set(EXTENSION_SOURCES
         src/delta_utils.cpp
         src/functions/delta_scan.cpp)
 
-### Custom config
-# TODO: figure out if we really need this?
-if(APPLE)
-    set(PLATFORM_LIBS m c System resolv "-framework Corefoundation -framework SystemConfiguration -framework Security")
-elseif(UNIX)
-    set(PLATFORM_LIBS m c resolv)
-elseif(WIN32)
-    set(PLATFORM_LIBS ws2_32 userenv advapi32)
-else()
-    message(STATUS "UNKNOWN OS")
-endif()
-
 ### Setup delta-kernel-rs dependency
 set(KERNEL_NAME delta_kernel)
 
@@ -36,25 +24,7 @@ set(KERNEL_NAME delta_kernel)
 set_directory_properties(PROPERTIES EP_PREFIX ${CMAKE_BINARY_DIR}/rust)
 
 # Propagate arch to rust build for CI
-set(RUST_PLATFORM_TARGET "")
-if("${OS_NAME}" STREQUAL "linux")
-    if ("${OS_ARCH}" STREQUAL "arm64")
-        set(RUST_PLATFORM_TARGET "aarch64-unknown-linux-gnu")
-    else()
-        set(RUST_PLATFORM_TARGET "x86_64-unknown-linux-gnu")
-    endif()
-elseif("${OS_NAME}" STREQUAL "osx")
-    # TODO: clean up upstream; we are not correctly setting OS_ARCH for cross compile
-    if ("${OSX_BUILD_ARCH}" STREQUAL "arm64")
-        set(RUST_PLATFORM_TARGET "aarch64-apple-darwin")
-    elseif ("${OSX_BUILD_ARCH}" STREQUAL "x86_64")
-        set(RUST_PLATFORM_TARGET "x86_64-apple-darwin")
-    elseif ("${OS_ARCH}" STREQUAL "arm64")
-        set(RUST_PLATFORM_TARGET "aarch64-apple-darwin")
-    else()
-        set(RUST_PLATFORM_TARGET "x86_64-apple-darwin")
-    endif()
-endif()
+set(RUST_PLATFORM_TARGET "wasm32-unknown-unknown")
 
 # Add rust_example as a CMake target
 ExternalProject_Add(
