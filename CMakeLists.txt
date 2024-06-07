@@ -34,10 +34,8 @@ ExternalProject_Add(
         CONFIGURE_COMMAND ""
         UPDATE_COMMAND ""
         BUILD_IN_SOURCE 1
-        # Build debug build
-        BUILD_COMMAND cargo build --package delta_kernel_ffi --workspace --target=${RUST_PLATFORM_TARGET}
         # Build release build
-        COMMAND cargo build --package delta_kernel_ffi --workspace --release --target=${RUST_PLATFORM_TARGET}
+        BUILD_COMMAND cargo build --package delta_kernel_ffi --workspace --release --target=${RUST_PLATFORM_TARGET}
         # Build DATs
         COMMAND cargo build --manifest-path=${CMAKE_BINARY_DIR}/rust/src/delta_kernel/acceptance/Cargo.toml --target=${RUST_PLATFORM_TARGET}
         BUILD_BYPRODUCTS "${CMAKE_BINARY_DIR}/rust/src/delta_kernel/target/${RUST_PLATFORM_TARGET}/debug/libdelta_kernel_ffi.a"
