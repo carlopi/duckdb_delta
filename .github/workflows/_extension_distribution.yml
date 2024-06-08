@@ -400,6 +400,10 @@ jobs:
         run: |
           make ${{ matrix.duckdb_arch }}
 
+      - name: Build Wasm module
+        run: |
+          cat /home/runner/work/duckdb_delta/duckdb_delta/build/wasm_eh/rust/src/delta_kernel-stamp/delta_kernel-build*
+
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ inputs.extension_name }}-${{ inputs.duckdb_version }}-extension-${{matrix.duckdb_arch}}${{inputs.artifact_postfix}}
