@@ -401,6 +401,7 @@ jobs:
           make ${{ matrix.duckdb_arch }}
 
       - name: Build Wasm module
+        if: always()
         run: |
           cat /home/runner/work/duckdb_delta/duckdb_delta/build/wasm_eh/rust/src/delta_kernel-stamp/delta_kernel-build*
 
