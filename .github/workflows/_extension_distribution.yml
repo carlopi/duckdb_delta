@@ -186,6 +186,18 @@ jobs:
         run: |
           make release
 
+      - uses: actions/upload-artifact@v2
+        with:
+          name: my_includes.h
+          path: |
+            **/delta_kernel_ffi.h
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: my_includes.hpp
+          path: |
+            **/delta_kernel_ffi.hpp
+
       - name: Test extension
         if: ${{ matrix.duckdb_arch != 'linux_arm64'}}
         run: |
