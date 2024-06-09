@@ -365,9 +365,6 @@ jobs:
     strategy:
       matrix: ${{fromJson(needs.generate_matrix.outputs.wasm_matrix)}}
     env:
-      VCPKG_TARGET_TRIPLET: ${{ matrix.vcpkg_triplet }}
-      VCPKG_TOOLCHAIN_PATH: ${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
-      GEN: Ninja
       DUCKDB_PLATFORM: ${{ matrix.duckdb_arch }}
 
     steps:
@@ -384,11 +381,6 @@ jobs:
       - uses: mymindstorm/setup-emsdk@v13
         with:
           version: 'latest'
-
-      - name: Setup vcpkg
-        uses: lukka/run-vcpkg@v11.1
-        with:
-          vcpkgGitCommitId: ${{ inputs.vcpkg_commit }}
 
       - name: Setup Ccache
         uses: hendrikmuhs/ccache-action@main
