@@ -35,7 +35,7 @@ ExternalProject_Add(
         UPDATE_COMMAND ""
         BUILD_IN_SOURCE 1
         # Build release build
-        BUILD_COMMAND cargo clippy --package delta_kernel_ffi --workspace --release --target=${RUST_PLATFORM_TARGET}
+        BUILD_COMMAND cargo clippy --package delta_kernel_ffi --target=${RUST_PLATFORM_TARGET}
         # Build DATs
         COMMAND cargo build --manifest-path=${CMAKE_BINARY_DIR}/rust/src/delta_kernel/acceptance/Cargo.toml --target=${RUST_PLATFORM_TARGET}
         BUILD_BYPRODUCTS "${CMAKE_BINARY_DIR}/rust/src/delta_kernel/target/${RUST_PLATFORM_TARGET}/debug/libdelta_kernel_ffi.a"
