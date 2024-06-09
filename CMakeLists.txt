@@ -57,7 +57,6 @@ ExternalProject_Add(
         BUILD_COMMAND cargo clippy --package delta_kernel_ffi --target=${RUST_PLATFORM_TARGET}
         # Build DATs
         COMMAND cargo build --manifest-path=${CMAKE_BINARY_DIR}/rust/src/delta_kernel/acceptance/Cargo.toml --target=${RUST_PLATFORM_TARGET}
-        BUILD_BYPRODUCTS "${CMAKE_BINARY_DIR}/rust/src/delta_kernel/target/${RUST_PLATFORM_TARGET}/debug/libdelta_kernel_ffi.a"
         BUILD_BYPRODUCTS "${CMAKE_BINARY_DIR}/rust/src/delta_kernel/target/${RUST_PLATFORM_TARGET}/release/libdelta_kernel_ffi.a"
         BUILD_BYPRODUCTS "${CMAKE_BINARY_DIR}/rust/src/delta_kernel/target/ffi-headers/delta_kernel_ffi.h"
         BUILD_BYPRODUCTS "${CMAKE_BINARY_DIR}/rust/src/delta_kernel/target/ffi-headers/delta_kernel_ffi.hpp"
