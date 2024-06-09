@@ -411,7 +411,7 @@ jobs:
       - name: Build Wasm module
         if: always()
         run: |
-          cat /home/runner/work/duckdb_delta/duckdb_delta/build/wasm_eh/rust/src/delta_kernel-stamp/delta_kernel-build*
+          cat /home/runner/work/duckdb_delta/duckdb_delta/build/wasm_*/rust/src/delta_kernel-stamp/delta_kernel-build*
 
       - uses: actions/upload-artifact@v3
         with:
