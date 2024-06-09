@@ -396,6 +396,14 @@ jobs:
         with:
           key: ${{ github.job }}-${{ matrix.duckdb_arch }}
 
+      - name: Install minimal stable with clippy and rustfmt
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: default
+          toolchain: stable
+          target: wasm32-unknown-emscripten
+          override: true
+
       - name: Build Wasm module
         run: |
           make ${{ matrix.duckdb_arch }}
