@@ -18,7 +18,7 @@ jobs:
     with:
       duckdb_version: v1.0.0
       extension_name: delta
-      exclude_archs: 'windows_amd64_rtools;windows_amd64;linux_arm64;wasm_eh;wasm_threads'
+      exclude_archs: 'windows_amd64_rtools;windows_amd64;linux_arm64'
 
   duckdb-stable-deploy:
     name: Deploy extension binaries

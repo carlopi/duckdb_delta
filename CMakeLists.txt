@@ -24,7 +24,7 @@ set(KERNEL_NAME delta_kernel)
 set_directory_properties(PROPERTIES EP_PREFIX ${CMAKE_BINARY_DIR}/rust)
 
 # Propagate arch to rust build for CI
-set(RUST_PLATFORM_TARGET "wasm32-unknown-emscripten")
+set(RUST_PLATFORM_TARGET "wasm32-unknown-unknown")
 
 # Add rust_example as a CMake target
 ExternalProject_Add(
