@@ -398,7 +398,7 @@ jobs:
 
       - name: Build Wasm module
         run: |
-          make ${{ matrix.duckdb_arch }}
+          CARGO_MAKEFLAGS='-j1' make ${{ matrix.duckdb_arch }}
 
       - name: Build Wasm module
         if: always()
