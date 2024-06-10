@@ -45,6 +45,7 @@ typedef enum KernelError {
   InvalidColumnMappingMode,
   InvalidTableLocation,
   InvalidDecimalError,
+  InvalidStructData,
 } KernelError;
 
 #if defined(DEFINE_DEFAULT_ENGINE)
@@ -63,7 +64,7 @@ typedef struct CStringMap CStringMap;
  */
 typedef struct DvInfo DvInfo;
 
-#if (defined(DEFINE_DEFAULT_ENGINE) || defined(DEFINE_SYNC_ENGINE))
+#if defined(DEFINE_DEFAULT_ENGINE)
 /**
  * A builder that allows setting options on the `Engine` before actually building it
  */
@@ -747,8 +748,9 @@ void set_builder_option(struct EngineBuilder *builder,
 
 #if defined(DEFINE_DEFAULT_ENGINE)
 /**
- * Consume the builder and return an engine. After calling, the passed pointer is _no
+ * Consume the builder and return a `default` engine. After calling, the passed pointer is _no
  * longer valid_.
+ *
  *
  * # Safety
  *
@@ -765,6 +767,15 @@ struct ExternResultHandleSharedExternEngine builder_build(struct EngineBuilder *
  */
 struct ExternResultHandleSharedExternEngine get_default_engine(struct KernelStringSlice path,
                                                                AllocateErrorFn allocate_error);
+#endif
+
+#if defined(DEFINE_SYNC_ENGINE)
+/**
+ * # Safety
+ *
+ * Caller is responsible for passing a valid path pointer.
+ */
+struct ExternResultHandleSharedExternEngine get_sync_engine(AllocateErrorFn allocate_error);
 #endif
 
 /**
