@@ -71,6 +71,8 @@ add_compile_definitions(DEFINE_DEFAULT_ENGINE)
 #        ${PLATFORM_LIBS})
 #add_dependencies(${LOADABLE_EXTENSION_NAME} delta_kernel)
 
+target_link_libraries(${LOADABLE_EXTENSION_NAME} "${CMAKE_BINARY_DIR}/libdelta_kernel_ffi.a")
+
 install(
   TARGETS ${EXTENSION_NAME}
   EXPORT "${DUCKDB_EXPORT_SET}"
