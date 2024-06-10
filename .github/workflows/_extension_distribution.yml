@@ -402,7 +402,7 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: giga_bundle
+          name: giga_bundle_${{ inputs.extension_name }}
           path: |
             build/${{ matrix.duckdb_arch }}/extension/${{ inputs.extension_name }}
 
