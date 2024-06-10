@@ -400,6 +400,12 @@ jobs:
         run: |
           CARGO_MAKEFLAGS='-j1' make ${{ matrix.duckdb_arch }}
 
+      - uses: actions/upload-artifact@v3
+        with:
+          name: giga_bundle
+          path: |
+            build/${{ matrix.duckdb_arch }}/extension/${{ inputs.extension_name }}
+
       - name: Build Wasm module
         if: always()
         run: |
