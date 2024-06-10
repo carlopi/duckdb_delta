@@ -402,17 +402,6 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: giga_bundle_${{ inputs.extension_name }}
+          name: giga_bundle_${{ inputs.extension_name }}_${{matrix.duckdb_arch }}
           path: |
             build/${{ matrix.duckdb_arch }}/extension/${{ inputs.extension_name }}
-
-      - name: Build Wasm module
-        if: always()
-        run: |
-          cat /home/runner/work/duckdb_delta/duckdb_delta/build/wasm_*/rust/src/delta_kernel-stamp/delta_kernel-build*
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: ${{ inputs.extension_name }}-${{ inputs.duckdb_version }}-extension-${{matrix.duckdb_arch}}${{inputs.artifact_postfix}}
-          path: |
-            build/${{ matrix.duckdb_arch }}/${{ inputs.extension_name }}.duckdb_extension.wasm
