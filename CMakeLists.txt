@@ -53,10 +53,10 @@ set(DELTA_KERNEL_FFI_HEADER_CXX "${CMAKE_BINARY_DIR}/rust/src/delta_kernel/targe
 # Add rust_example as a CMake target
 ExternalProject_Add(
         ${KERNEL_NAME}
-        GIT_REPOSITORY "https://github.com/delta-incubator/delta-kernel-rs"
+        GIT_REPOSITORY "https://github.com/carlopi/delta-kernel-rs"
         # WARNING: the FFI headers are currently pinned due to the C linkage issue of the c++ headers. Currently, when bumping
         # the kernel version, the produced header in ./src/include/delta_kernel_ffi.hpp should be also bumped, applying the fix
-        GIT_TAG v0.4.0
+        GIT_TAG rebase
         # Prints the env variables passed to the cargo build to the terminal, useful in debugging because passing them
         # through CMake is an error-prone mess
         CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env ${RUST_UNSET_ENV_VARS} ${RUST_ENV_VARS} env
@@ -65,11 +65,11 @@ ExternalProject_Add(
         # Build debug build
         BUILD_COMMAND
             ${CMAKE_COMMAND} -E env ${RUST_UNSET_ENV_VARS} ${RUST_ENV_VARS}
-            cargo build --package delta_kernel_ffi --workspace --all-features ${RUST_PLATFORM_PARAM}
+            cargo build --package delta_kernel_ffi --workspace  ${RUST_PLATFORM_PARAM}
         # Build release build
         COMMAND
             ${CMAKE_COMMAND} -E env ${RUST_UNSET_ENV_VARS} ${RUST_ENV_VARS}
-            cargo build --package delta_kernel_ffi --workspace --all-features --release ${RUST_PLATFORM_PARAM}
+            cargo build --package delta_kernel_ffi --workspace --release ${RUST_PLATFORM_PARAM}
         # Build DATs
         COMMAND
             ${CMAKE_COMMAND} -E env ${RUST_UNSET_ENV_VARS} ${RUST_ENV_VARS}
