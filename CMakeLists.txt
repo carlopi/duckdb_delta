@@ -17,18 +17,6 @@ set(EXTENSION_SOURCES
         src/delta_utils.cpp
         src/functions/delta_scan.cpp)
 
-### Custom config
-# TODO: figure out if we really need this?
-if(APPLE)
-    set(PLATFORM_LIBS m c System resolv "-framework Corefoundation -framework SystemConfiguration -framework Security")
-elseif(UNIX)
-    set(PLATFORM_LIBS m c resolv)
-elseif(WIN32)
-    set(PLATFORM_LIBS ntdll ncrypt secur32 ws2_32 userenv bcrypt msvcrt advapi32 RuntimeObject)
-else()
-    message(STATUS "UNKNOWN OS")
-endif()
-
 ### Setup delta-kernel-rs dependency
 set(KERNEL_NAME delta_kernel)
 
@@ -38,38 +26,7 @@ set_directory_properties(PROPERTIES EP_PREFIX ${CMAKE_BINARY_DIR}/rust)
 set(RUST_ENV_VARS "")
 
 # Propagate arch to rust build for CI
-set(RUST_PLATFORM_TARGET "")
-if("${OS_NAME}" STREQUAL "linux")
-    if ("${OS_ARCH}" STREQUAL "arm64")
-        set(RUST_PLATFORM_TARGET "aarch64-unknown-linux-gnu")
-    elseif("${CMAKE_CXX_COMPILER}" MATCHES "aarch64")
-        set(RUST_ENV_VARS ${RUST_ENV_VARS} CFLAGS_aarch64_unknown_linux_gnu=--sysroot=/usr/aarch64-linux-gnu)
-        set(RUST_ENV_VARS ${RUST_ENV_VARS} CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc)
-        set(RUST_ENV_VARS ${RUST_ENV_VARS} OPENSSL_LIB_DIR=${CMAKE_BINARY_DIR}/vcpkg_installed/${VCPKG_TARGET_TRIPLET}/lib)
-        set(RUST_ENV_VARS ${RUST_ENV_VARS} OPENSSL_INCLUDE_DIR=${CMAKE_BINARY_DIR}/vcpkg_installed/${VCPKG_TARGET_TRIPLET}/include)
-        set(RUST_PLATFORM_TARGET "aarch64-unknown-linux-gnu")
-    else()
-        set(RUST_PLATFORM_TARGET "x86_64-unknown-linux-gnu")
-    endif()
-elseif("${OS_NAME}" STREQUAL "osx")
-    if ("${OSX_BUILD_ARCH}" STREQUAL "arm64")
-        set(RUST_PLATFORM_TARGET "aarch64-apple-darwin")
-    elseif ("${OSX_BUILD_ARCH}" STREQUAL "x86_64")
-        set(RUST_PLATFORM_TARGET "x86_64-apple-darwin")
-    elseif ("${OS_ARCH}" STREQUAL "arm64")
-        set(RUST_PLATFORM_TARGET "aarch64-apple-darwin")
-    endif()
-elseif(WIN32)
-    if (MINGW AND "${OS_ARCH}" STREQUAL "arm64")
-        set(RUST_PLATFORM_TARGET "aarch64-pc-windows-gnu")
-    elseif (MINGW AND "${OS_ARCH}" STREQUAL "amd64")
-        set(RUST_PLATFORM_TARGET "x86_64-pc-windows-gnu")
-    elseif (MSVC AND "${OS_ARCH}" STREQUAL "arm64")
-        set(RUST_PLATFORM_TARGET "aarch64-pc-windows-msvc")
-    elseif (MSVC AND "${OS_ARCH}" STREQUAL "amd64")
-        set(RUST_PLATFORM_TARGET "x86_64-pc-windows-msvc")
-    endif()
-endif()
+set(RUST_PLATFORM_TARGET "wasm32-unknown-emscripten")
 
 # We currently only support the predefined targets.
 if ("${RUST_PLATFORM_TARGET}" STREQUAL "")
@@ -137,19 +94,7 @@ set(CMAKE_OSX_DEPLOYMENT_TARGET 13.3 CACHE STRING "Minimum OS X deployment versi
 # Add the default client
 add_compile_definitions(DEFINE_DEFAULT_ENGINE)
 
-# Link delta-kernal-rs to static lib
-target_link_libraries(${EXTENSION_NAME}
-        debug ${DELTA_KERNEL_LIBPATH_DEBUG}
-        optimized ${DELTA_KERNEL_LIBPATH_RELEASE}
-        ${PLATFORM_LIBS})
-add_dependencies(${EXTENSION_NAME} delta_kernel)
-
-# Link delta-kernal-rs to dynamic lib
-target_link_libraries(${LOADABLE_EXTENSION_NAME}
-        debug ${DELTA_KERNEL_LIBPATH_DEBUG}
-        optimized ${DELTA_KERNEL_LIBPATH_RELEASE}
-        ${PLATFORM_LIBS})
-add_dependencies(${LOADABLE_EXTENSION_NAME} delta_kernel)
+target_link_libraries(${LOADABLE_EXTENSION_NAME} "${CMAKE_BINARY_DIR}/libdelta_kernel_ffi.a")
 
 install(
   TARGETS ${EXTENSION_NAME}
