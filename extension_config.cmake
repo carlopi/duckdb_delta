@@ -4,5 +4,6 @@
 duckdb_extension_load(delta
     SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}
     LOAD_TESTS
-	DONT_LINK
+    DONT_LINK
+    LINKED_LIBS "../../rust/src/delta_kernel/target/wasm32-unknown-emscripten/debug/libdelta_kernel_ffi.a"
 )
