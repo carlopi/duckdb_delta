@@ -56,7 +56,7 @@ ExternalProject_Add(
         GIT_REPOSITORY "https://github.com/carlopi/delta-kernel-rs"
         # WARNING: the FFI headers are currently pinned due to the C linkage issue of the c++ headers. Currently, when bumping
         # the kernel version, the produced header in ./src/include/delta_kernel_ffi.hpp should be also bumped, applying the fix
-        GIT_TAG rebase
+        GIT_TAG experiment_wasm
         # Prints the env variables passed to the cargo build to the terminal, useful in debugging because passing them
         # through CMake is an error-prone mess
         CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env ${RUST_UNSET_ENV_VARS} ${RUST_ENV_VARS} env
@@ -65,15 +65,7 @@ ExternalProject_Add(
         # Build debug build
         BUILD_COMMAND
             ${CMAKE_COMMAND} -E env ${RUST_UNSET_ENV_VARS} ${RUST_ENV_VARS}
-            cargo build --package delta_kernel_ffi --workspace  ${RUST_PLATFORM_PARAM}
-        # Build release build
-        COMMAND
-            ${CMAKE_COMMAND} -E env ${RUST_UNSET_ENV_VARS} ${RUST_ENV_VARS}
-            cargo build --package delta_kernel_ffi --workspace --release ${RUST_PLATFORM_PARAM}
-        # Build DATs
-        COMMAND
-            ${CMAKE_COMMAND} -E env ${RUST_UNSET_ENV_VARS} ${RUST_ENV_VARS}
-            cargo build --manifest-path=${CMAKE_BINARY_DIR}/rust/src/delta_kernel/acceptance/Cargo.toml
+            cargo build --package delta_kernel_ffi --features sync-engine  ${RUST_PLATFORM_PARAM}
         # Define the byproducts, required for building with Ninja
         BUILD_BYPRODUCTS "${DELTA_KERNEL_LIBPATH_DEBUG}"
         BUILD_BYPRODUCTS "${DELTA_KERNEL_LIBPATH_RELEASE}"
